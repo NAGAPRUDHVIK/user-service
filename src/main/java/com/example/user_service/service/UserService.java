@@ -34,16 +34,12 @@ public class UserService {
         UserEntity newUser = userInfoRepository.saveAndFlush(
             new UserEntity(0, user.getUserEmail(), user.getUserPassword(), user.getUserFirstName(), user.getUserLastName(), user.getUserPhoneNo())
         );
-
         if (user.getAllRolesId() == null || user.getAllRolesId().isEmpty()) {
-            user.setAllRolesId(List.of(1));  // Default role ID
+            user.setAllRolesId(List.of(1));
         }
-
         for (int roleId : user.getAllRolesId()) {
-            System.out.println("Assigning role ID: " + roleId + " to user ID: " + newUser.getUserId());
             roleClient.createUserRole(new UserRoleCreateDto(0, newUser.getUserId(), roleId));
         }
-
         return user;
     }
 
@@ -64,26 +60,17 @@ public class UserService {
 		return true;
 	}
 	
-//	public Optional<UserEntity> getAUserById(int uId){
-//		return userInfoRepository.findById(uId);
-//	}
-//	
-//	public Optional<UserEntity> getUserByEmail(String email) {
-//        return userInfoRepository.findByUserEmail(email);
-//    }
-//	
-//	public UserEntity addUser(UserEntity newUser) {
-//		newUser.setUserPassword(passwordEncoder.encode(newUser.getUserPassword()));
-//		return userInfoRepository.saveAndFlush(newUser);
-//	}
-//	
-//	public UserEntity updateUser(UserEntity editUser) {
-//		editUser.setUserPassword(passwordEncoder.encode(editUser.getUserPassword()));
-//		return userInfoRepository.save(editUser);
-//	}
-//	
-//	public void deleteUser(int uId) {
-//		userInfoRepository.deleteById(uId);
-//	}
+	public Optional<UserEntity> getUserByEmail(String email) {
+        return userInfoRepository.findByUserEmail(email);
+    }
+	
+	public UserEntity updateUser(UserEntity editUser) {
+		editUser.setUserPassword(passwordEncoder.encode(editUser.getUserPassword()));
+		return userInfoRepository.save(editUser);
+	}	
+	
+	public void deleteUser(int uId) {
+		userInfoRepository.deleteById(uId);
+	}
 		
 }

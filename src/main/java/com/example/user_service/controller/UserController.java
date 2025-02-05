@@ -58,6 +58,11 @@ public class UserController {
 	public Optional<UserEntity> getAuserById(@PathVariable int userId){
 		return userService.getAuserById(userId);
 	}
+	
+	@GetMapping("/{userEmail}")
+	public Optional<UserEntity> getAUserByEmail(@PathVariable String userEmail){
+		return userService.getUserByEmail(userEmail);
+	}
 
 	@GetMapping("/validate/token")
 	public boolean validateToken(@RequestParam String token) {
@@ -72,10 +77,18 @@ public class UserController {
 			System.out.println("isAuthenticated?" + authenticate.isAuthenticated());
 			System.out.println("user authorities: " + authenticate.getAuthorities());
 			List<String> allRoles = authenticate.getAuthorities().stream().map((role)->role.getAuthority()).toList();
-			//return userCredService.generateToken(user.getName(), authenticate.getAuthorities().stream().map((role)->role.getAuthority()).toList());
 			return (new UserRoleTokenDto(user.getUserEmail(), allRoles, userService.generateToken(user.getUserEmail(),allRoles)));
 		}
 		return null;
-
+	}
+	
+	@PutMapping
+	public UserEntity updateUser(UserEntity editUser) {
+		return userService.updateUser(editUser);
+	}
+	
+	@DeleteMapping
+	public void deleteUser(int uId) {
+		userService.deleteUser(uId);
 	}
 }

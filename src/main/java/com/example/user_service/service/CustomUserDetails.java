@@ -15,10 +15,12 @@ public class CustomUserDetails implements UserDetails {
 	private String userEmail;
     private String userPassword;
     private Collection<? extends GrantedAuthority> authorities;
+    private List<String> roles; // Store the roles
 
     public CustomUserDetails(UserEntity user, List<String> roles) {
         this.userEmail = user.getUserEmail();
         this.userPassword = user.getUserPassword();
+        this.roles = roles;  // Store the roles
         this.authorities = roles.stream()
                                 .map(SimpleGrantedAuthority::new)
                                 .collect(Collectors.toList());
@@ -59,4 +61,8 @@ public class CustomUserDetails implements UserDetails {
         return true;
     }
 
+    // Getter method to retrieve the roles
+    public List<String> getRoles() {
+        return roles;
+    }
 }
